@@ -132,7 +132,7 @@ public class ReactorNettyWebSocketClient implements WebSocketClient {
 		String protocols = StringUtils.collectionToCommaDelimitedString(handler.getSubProtocols());
 		return getHttpClient()
 				.headers(nettyHeaders -> setNettyHeaders(requestHeaders, nettyHeaders))
-				.websocket(protocols, getMaxFramePayloadLength(), this.handlePing)
+				.websocket()
 				.uri(url.toString())
 				.handle((inbound, outbound) -> {
 					HttpHeaders responseHeaders = toHttpHeaders(inbound);
