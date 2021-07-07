@@ -281,6 +281,11 @@ public class DefaultRSocketRequesterBuilderTests {
 		}
 
 		@Override
+		public ByteBufAllocator alloc() {
+			return null;
+		}
+
+		@Override
 		public Mono<Void> onClose() {
 			return Mono.empty();
 		}

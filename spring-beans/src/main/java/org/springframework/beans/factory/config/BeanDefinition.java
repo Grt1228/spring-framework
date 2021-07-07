@@ -37,6 +37,16 @@ import org.springframework.lang.Nullable;
  * @see ConfigurableListableBeanFactory#getBeanDefinition
  * @see org.springframework.beans.factory.support.RootBeanDefinition
  * @see org.springframework.beans.factory.support.ChildBeanDefinition
+ *
+ *
+ * 这里的 BeanDefinition 就是我们所说的 Spring 的 Bean，
+ * 我们自己定义的各个 Bean 其实会转换成一个个 BeanDefinition 存在于 Spring 的 BeanFactory 中。
+ *
+ * 所以，如果有人问你 Bean 是什么的时候，你要知道 Bean 在代码层面上可以简单认为是 BeanDefinition 的实例。
+ *
+ * BeanDefinition 中保存了我们的 Bean 信息，比如这个 Bean 指向的是哪个类、是否是单例的、是否懒加载、这个 Bean 依赖了哪些 Bean 等等。
+ *
+ *
  */
 public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
@@ -45,6 +55,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * <p>Note that extended bean factories might support further scopes.
 	 * @see #setScope
 	 * @see ConfigurableBeanFactory#SCOPE_SINGLETON
+	 * 单例
 	 */
 	String SCOPE_SINGLETON = ConfigurableBeanFactory.SCOPE_SINGLETON;
 
@@ -53,6 +64,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * <p>Note that extended bean factories might support further scopes.
 	 * @see #setScope
 	 * @see ConfigurableBeanFactory#SCOPE_PROTOTYPE
+	 * 多例
 	 */
 	String SCOPE_PROTOTYPE = ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
@@ -87,6 +99,8 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
 	 * Set the name of the parent definition of this bean definition, if any.
+	 * // 设置父 Bean，这里涉及到 bean 继承，不是 java 继承。
+	 *  // 一句话就是：继承父 Bean 的配置信息而已
 	 */
 	void setParentName(@Nullable String parentName);
 
@@ -103,6 +117,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * @see #setParentName
 	 * @see #setFactoryBeanName
 	 * @see #setFactoryMethodName
+	 * // 设置 Bean 的类名称，将来是要通过反射来生成实例的
 	 */
 	void setBeanClassName(@Nullable String beanClassName);
 
@@ -117,6 +132,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * @see #getParentName()
 	 * @see #getFactoryBeanName()
 	 * @see #getFactoryMethodName()
+	 * 类名称获取
 	 */
 	@Nullable
 	String getBeanClassName();
@@ -125,6 +141,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * Override the target scope of this bean, specifying a new scope name.
 	 * @see #SCOPE_SINGLETON
 	 * @see #SCOPE_PROTOTYPE
+	 * 设置单例，多例
 	 */
 	void setScope(@Nullable String scope);
 
@@ -151,11 +168,14 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * Set the names of the beans that this bean depends on being initialized.
 	 * The bean factory will guarantee that these beans get initialized first.
+	 *  // 设置该 Bean 依赖的所有的 Bean，注意，这里的依赖不是指属性依赖(如 @Autowire 标记的)，
+	 *    // 是 depends-on="" 属性设置的值。
 	 */
 	void setDependsOn(@Nullable String... dependsOn);
 
 	/**
 	 * Return the bean names that this bean depends on.
+	 * 返回该 Bean 的所有依赖
 	 */
 	@Nullable
 	String[] getDependsOn();
@@ -166,11 +186,14 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * It does not affect explicit references by name, which will get resolved even
 	 * if the specified bean is not marked as an autowire candidate. As a consequence,
 	 * autowiring by name will nevertheless inject a bean if the name matches.
+	 * 		// 设置该 Bean 是否可以注入到其他 Bean 中，只对根据类型注入有效，
+	 *    	// 如果根据名称注入，即使这边设置了 false，也是可以的
 	 */
 	void setAutowireCandidate(boolean autowireCandidate);
 
 	/**
 	 * Return whether this bean is a candidate for getting autowired into some other bean.
+	 * 该 Bean 是否可以注入到其他 Bean 中
 	 */
 	boolean isAutowireCandidate();
 
@@ -178,11 +201,13 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * Set whether this bean is a primary autowire candidate.
 	 * <p>If this value is {@code true} for exactly one bean among multiple
 	 * matching candidates, it will serve as a tie-breaker.
+	 * 主要的，同一接口的多个实现，如果不指定名字的话，Spring 会优先选择设置 primary 为 true 的 bean
 	 */
 	void setPrimary(boolean primary);
 
 	/**
 	 * Return whether this bean is a primary autowire candidate.
+	 * 是否是 primary 的
 	 */
 	boolean isPrimary();
 

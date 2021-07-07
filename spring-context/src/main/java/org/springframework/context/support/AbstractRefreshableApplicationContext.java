@@ -127,9 +127,16 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 			closeBeanFactory();
 		}
 		try {
+			//初始化一个DefaultListableBeanFactory
 			DefaultListableBeanFactory beanFactory = createBeanFactory();
 			beanFactory.setSerializationId(getId());
+
+			//定制BeanFactory ，配置是否允许 BeanDefinition 覆盖、是否允许循环引用。
 			customizeBeanFactory(beanFactory);
+			//重点重点重点重点
+			/**
+			 * 这个方法将根据配置，加载各个 Bean，然后放到 BeanFactory 中。
+			 */
 			loadBeanDefinitions(beanFactory);
 			synchronized (this.beanFactoryMonitor) {
 				this.beanFactory = beanFactory;
@@ -223,9 +230,23 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 */
 	protected void customizeBeanFactory(DefaultListableBeanFactory beanFactory) {
 		if (this.allowBeanDefinitionOverriding != null) {
+			//是否允许 Bean 定义覆盖
+			/**
+			 * BeanDefinition 的覆盖问题可能会有开发者碰到这个坑，
+			 * 就是在配置文件中定义 bean 时使用了相同的 id 或 name，
+			 * 默认情况下，allowBeanDefinitionOverriding 属性为 null，
+			 * 如果在同一配置文件中重复了，会抛错，
+			 * 但是如果不是同一配置文件中，会发生覆盖。
+			 */
 			beanFactory.setAllowBeanDefinitionOverriding(this.allowBeanDefinitionOverriding);
 		}
 		if (this.allowCircularReferences != null) {
+			//是否允许 Bean 间的循环依赖
+			/**
+			 * 循环引用也很好理解：A 依赖 B，而 B 依赖 A。或 A 依赖 B，B 依赖 C，而 C 依赖 A。
+			 *
+			 * 默认情况下，Spring 允许循环依赖，当然如果你在 A 的构造方法中依赖 B，在 B 的构造方法中依赖 A 是不行的。
+			 */
 			beanFactory.setAllowCircularReferences(this.allowCircularReferences);
 		}
 	}
