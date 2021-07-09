@@ -1,5 +1,6 @@
 package com.unfbx.test;
 
+import com.unfbx.pojo.B;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -14,5 +15,11 @@ public class ApplicationTest {
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:application.xml");
 
 		System.out.println(applicationContext.getBean("a"));
+		B b = applicationContext.getBean(B.class);
+
+		System.out.println(b.getBeanName());
+		System.out.println(b.getEnvironment().toString());
+
+
 	}
 }
