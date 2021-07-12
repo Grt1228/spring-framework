@@ -2,11 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
-	<bean id="a" class="com.unfbx.pojo.A">
-		<property name="b" ref="b"></property>
-	</bean>
-	<bean id="b" class="com.unfbx.pojo.B">
-		<property name="a" ref="a"></property>
-	</bean>
+<!--	<bean id="a" class="com.unfbx.pojo.A">-->
+<!--		<property name="b" ref="b"></property>-->
+<!--	</bean>-->
+<!--	<bean id="b" class="com.unfbx.pojo.B">-->
+<!--		<property name="a" ref="a"></property>-->
+<!--	</bean>-->
 
+		<bean id="student" class="com.unfbx.pojo.Student"></bean>
+		<bean id="myBeanPostProcessor" class="com.unfbx.beanpostprocessor.MyBeanPostProcessor"></bean>
 </beans>

@@ -11,14 +11,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class ApplicationTest {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:application.xml");
 
-		System.out.println(applicationContext.getBean("a"));
-		B b = applicationContext.getBean(B.class);
-
-		System.out.println(b.getBeanName());
-		System.out.println(b.getEnvironment().toString());
+		System.out.println(applicationContext.getBean("student"));
+//		System.out.println(applicationContext.getBean("a"));
+//		B b = applicationContext.getBean(B.class);
+//		System.out.println(b.getBeanName());
+//		System.out.println(b.getEnvironment().toString());
 
 
 	}
